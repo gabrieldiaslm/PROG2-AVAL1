@@ -1,30 +1,33 @@
+
 class Genotype {
-  late final String genotypeFirst;
+  late final String _genotype;
 
   Genotype(String genotype) {
-    if (validGenotypes(genotype)) {
-      genotypeFirst = genotype;
+    if (validGenotype(genotype)) {
+      _genotype = genotype;
     } else {
-      throw ArgumentError(genotype);
+      throw ArgumentError("invalido $genotype");
     }
   }
 
   @override
   String toString() {
-    if (genotypeFirst.isNotEmpty) {
-      return genotypeFirst;
+    if (_genotype.isNotEmpty) {
+      return _genotype;
     } else {
-      return genotypeFirst.toString();
+      return _genotype.toString();
     }
   }
 
-  bool validGenotypes(String genotype) {
-    final genotypesList = ["AA", "Ai", "BB", "Bi", "AB", "ii"];
-    return genotypesList.contains(genotype);
+  // Método para verificar se o genótipo é válido
+  bool validGenotype(String genotype) {
+    final validGenotypes = ["AA", "Ai", "BB", "Bi", "AB", "ii"];
+    return validGenotypes.contains(genotype);
   }
 
+  // Método para determinar o  com base no genótipo
   String bloodType(genotype) {
-    switch (genotypeFirst) {
+    switch (_genotype) {
       case "AA":
         return "A";
       case "Ai":
@@ -42,40 +45,28 @@ class Genotype {
     }
   }
 
-  List<String> allelesToList() {
-    List<String> allelesList = genotypeFirst.split('');
-    List<String> allelesListFinal = [];
-    for (var a in allelesList) {
-      if (allelesListFinal.contains(a)) {
-        continue;
-      } else {
-        allelesListFinal.add(a);
-      }
-    }
-    return allelesListFinal;
-  }
-
   List<String> get alleles {
-    return allelesToList();
+    var lista = _genotype.split("");
+    List<String> lista2 = [];
+    if (lista[0] == lista[1]) {
+      lista2.add(lista[0]);
+      return lista2;
+    } else {
+      return lista;
+    }
   }
 
   List<String> get agglutinogens {
     List<String> agglutinogensList = [];
-    if (genotypeFirst.contains('A') && genotypeFirst.contains("B")) {
+    if (_genotype.contains('A') && _genotype.contains("B")) {
       agglutinogensList.add('A');
       agglutinogensList.add('B');
-    } else if (genotypeFirst.contains('AA')) {
+    } else if (_genotype.contains('A')) {
       agglutinogensList.add('A');
-      agglutinogensList.add('A');
-    } else if (genotypeFirst.contains('A')) {
-      agglutinogensList.add('A');
-    } else if (genotypeFirst.contains('BB')) {
+    } else if (_genotype.contains('B')) {
       agglutinogensList.add('B');
-      agglutinogensList.add('B');
-    } else if (genotypeFirst.contains('B')) {
-      agglutinogensList.add('B');
-    } else {
-      agglutinogensList.add("i");
+     }  else {
+      agglutinogensList.add("");
     }
 
     return agglutinogensList;
@@ -83,26 +74,24 @@ class Genotype {
 
   List<String> get agglutinins {
     List<String> agglutininsList = [];
-    if (genotypeFirst.contains('A') && genotypeFirst.contains("B")) {
+    if (_genotype.contains('A') && _genotype.contains("B")) {
       agglutininsList.add('');
-    } else if (genotypeFirst.contains("A")) {
+    } else if (_genotype.contains("A")) {
       agglutininsList.add('B');
-    } else if (genotypeFirst.contains("B")) {
+    } else if (_genotype.contains("B")) {
       agglutininsList.add('A');
-    } else if (genotypeFirst.contains("i")) {
+    } else if (_genotype.contains("i")) {
       agglutininsList.add('A');
       agglutininsList.add('B');
     }
     return agglutininsList;
   }
 
-  //
   List<String> offsprings(Genotype genotype) {
     List<String> offspringsList = [];
-    var genotype1 = genotypeFirst.split('');
-    var genotype2 = genotype.genotypeFirst.split('');
-    List resultado = [];
-
+    var genotype1 = _genotype.split('');
+    var genotype2 = genotype._genotype.split("");
+    var resultado = [];
     for (var i in genotype1) {
       for (var i2 in genotype2) {
         if (i == 'i') {
@@ -117,10 +106,7 @@ class Genotype {
       }
     }
     for (var i in resultado) {
-      var splitado = i.split('');
-      if (splitado[0] == splitado[1] && offspringsList.contains(i)) {
-        continue;
-      } else if (splitado[0] != splitado[1] && offspringsList.contains(i)) {
+      if (offspringsList.contains(i)) {
         continue;
       } else {
         offspringsList.add(i);
@@ -130,19 +116,21 @@ class Genotype {
   }
 
   bool compatible(Genotype genotype) {
-    if (genotypeFirst == 'ii') {
+    // Check if this genotype is universal donor "ii"
+    if (_genotype == 'ii') {
       return true;
     }
 
-    if (genotype.genotypeFirst == 'AB') {
+    // Check if the other genotype is universal receiver "AB"
+    if (genotype._genotype == 'AB') {
       return true;
     }
 
-    final agglutinogensList1 = agglutinogens;
-    final agglutinogensList2 = genotype.agglutinogens;
+    final agglutinogens1 = agglutinogens;
+    final agglutinogens2 = genotype.agglutinogens;
 
-    for (String antigen in agglutinogensList1) {
-      if (!agglutinogensList2.contains(antigen)) {
+    for (String antigen in agglutinogens1) {
+      if (!agglutinogens2.contains(antigen)) {
         return false;
       }
     }
@@ -154,16 +142,32 @@ class Genotype {
 class Individual {
   static int _individualCounter = 1;
 
-  final Genotype genotype;
+  final Genotype genotype; // Armazena uma instância de Genotype
   late String name;
 
-  Individual(String genotypeIndiv, [String? name])
-      : genotype = Genotype(genotypeIndiv),
-        name = name ?? nameCreator(genotypeIndiv);
+  Individual(String genotypeString, [String? name])
+      : genotype = Genotype(genotypeString),
+        name = name ?? _generateName(genotypeString);
 
-  static String nameCreator(String genotype) {
+  static String _generateName(String genotype) {
     int N = _individualCounter++;
     return "Indiv$N";
+  }
+
+  List<String> get alleles {
+    return genotype.alleles;
+  }
+
+  List<String> get agglutinogens {
+    return genotype.agglutinogens;
+  }
+
+  List<String> get agglutinins {
+    return genotype.agglutinins;
+  }
+
+  List<String> get offsprings {
+    return genotype.offsprings(genotype);
   }
 
   @override
