@@ -1,4 +1,4 @@
-T#   Message                                           
+T#   Message                                        //Reler o arquivo falando sobre os nomes das variáveis   
 T01  Bad individual genotype: A                        
 T02  Bad individual genotype: B                        
 T03  Bad individual genotype: i                        
