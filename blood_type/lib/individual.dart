@@ -1,4 +1,4 @@
-import 'package:blood_type/genotype.dart';
+import 'genotype.dart';
 
 class Individual {
   static int _individualCounter = 1;
