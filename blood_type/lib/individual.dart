@@ -8,9 +8,9 @@ class Individual {
 
   Individual(String genotypeString, [String? name])
       : genotype = Genotype(genotypeString),
-        name = name ?? _generateName(genotypeString);
+        name = name ?? _nameCreator(genotypeString);
 
-  static String _generateName(String genotype) {
+  static String _nameCreator(String genotype) {
     int N = _individualCounter++;
     return "Indiv$N";
   }
