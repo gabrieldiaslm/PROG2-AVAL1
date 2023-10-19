@@ -2,10 +2,10 @@ class Genotype {
   late final String _genotype;
 
   Genotype(String genotype) {
-    if (validGenotype(genotype)) {
+    if (validatingGenotype(genotype)) {
       _genotype = genotype;
     } else {
-      throw ArgumentError("invalido $genotype");
+      throw ArgumentError(genotype);
     }
   }
 
@@ -18,7 +18,7 @@ class Genotype {
     }
   }
 
-  bool validGenotype(String genotype) {
+  bool validatingGenotype(String genotype) {
     final validGenotypes = ["AA", "Ai", "BB", "Bi", "AB", "ii"];
     return validGenotypes.contains(genotype);
   }
@@ -54,34 +54,34 @@ class Genotype {
   }
 
   List<String> get agglutinogens {
-    List<String> agglutinogensList = [];
+    List<String> agglutinogensListed = [];
     if (_genotype.contains('A') && _genotype.contains("B")) {
-      agglutinogensList.add('A');
-      agglutinogensList.add('B');
+      agglutinogensListed.add('A');
+      agglutinogensListed.add('B');
     } else if (_genotype.contains('A')) {
-      agglutinogensList.add('A');
+      agglutinogensListed.add('A');
     } else if (_genotype.contains('B')) {
-      agglutinogensList.add('B');
+      agglutinogensListed.add('B');
     }  else {
-      agglutinogensList.add("");
+      agglutinogensListed.add("");
     }
 
-    return agglutinogensList;
+    return agglutinogensListed;
   }
 
   List<String> get agglutinins {
-    List<String> agglutininsList = [];
+    List<String> agglutininsListed = [];
     if (_genotype.contains('A') && _genotype.contains("B")) {
-      agglutininsList.add('');
+      agglutininsListed.add('');
     } else if (_genotype.contains("A")) {
-      agglutininsList.add('B');
+      agglutininsListed.add('B');
     } else if (_genotype.contains("B")) {
-      agglutininsList.add('A');
+      agglutininsListed.add('A');
     } else if (_genotype.contains("i")) {
-      agglutininsList.add('A');
-      agglutininsList.add('B');
+      agglutininsListed.add('A');
+      agglutininsListed.add('B');
     }
-    return agglutininsList;
+    return agglutininsListed;
   }
 
   List<String> offsprings(Genotype genotype) {
