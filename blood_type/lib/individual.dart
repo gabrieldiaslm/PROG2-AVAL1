@@ -1,7 +1,7 @@
 import 'genotype.dart';
 
 class Individual {
-  static int _individualCounter = 1;
+  static int _personCount = 1;
 
   final Genotype genotype;
   late String name;
@@ -11,7 +11,7 @@ class Individual {
         name = name ?? _nameCreator(genotypeString);
 
   static String _nameCreator(String genotype) {
-    int N = _individualCounter++;
+    int N = _personCount++;
     return "Indiv$N";
   }
 
